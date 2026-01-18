@@ -1,16 +1,14 @@
 'use client'
 
-export const dynamic = 'force-dynamic'
-
 import Link from 'next/link'
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { MapPin, Calendar, Briefcase, Search } from 'lucide-react'
 import { mockJobs, jobCategories } from '@/lib/mockData'
 import { useAIOperation } from '@/components/AIOperationProvider'
 import { extractKeywordsFromResume, rankJobs } from '@/lib/resumeAnalyzer'
 
-export default function JobsPage() {
+function JobsContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const [searchTerm, setSearchTerm] = useState('')
@@ -289,5 +287,13 @@ export default function JobsPage() {
         )}
       </div>
     </div>
+  )
+}
+
+export default function JobsPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-gray-50 flex items-center justify-center">加载中...</div>}>
+      <JobsContent />
+    </Suspense>
   )
 }
