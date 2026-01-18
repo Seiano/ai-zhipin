@@ -1,14 +1,12 @@
 'use client'
 
-export const dynamic = 'force-dynamic'
-
-import { useEffect } from 'react'
+import { useEffect, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { jobCategories, mockJobs } from '@/lib/mockData'
 import { useAIOperation } from '@/components/AIOperationProvider'
 
-export default function SeekerHomePage() {
+function SeekerHomeContent() {
   const searchParams = useSearchParams()
   const { startAIOperation } = useAIOperation()
   
@@ -424,5 +422,13 @@ export default function SeekerHomePage() {
         </section>
       </div>
     </div>
+  )
+}
+
+export default function SeekerHomePage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-white flex items-center justify-center">加载中...</div>}>
+      <SeekerHomeContent />
+    </Suspense>
   )
 }
